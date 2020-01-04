@@ -1,5 +1,6 @@
+//D3JS
 var tabulate = function (data,columns) {
-  var table = d3.select('body').append('table')
+  var table = d3.select('#d3table').append('table')
 	var thead = table.append('thead')
 	var tbody = table.append('tbody')
 
@@ -8,7 +9,9 @@ var tabulate = function (data,columns) {
 	    .data(columns)
 	    .enter()
 	  .append('th')
-	    .text(function (d) { return d })
+	    .text(function (d, i) {
+	    	return d
+	    })
 
 	var rows = tbody.selectAll('tr')
 	    .data(data)
@@ -25,20 +28,26 @@ var tabulate = function (data,columns) {
     .append('td')
 		.text(function (d) { return  isNaN(d.value)? d.value : Math.round(d.value * 100) / 100  })
 
-
 	d3.selectAll("td")
-		.style("background", function(d) {
+		.style("background", function(d,i) {
+			console.log("index" + i + " data "+d)
 			if (!isNaN(d.value)){
-			return "background", "linear-gradient(to right, red, red "+d.value+"%, white "+(100 - d.value)+"%)"
+				if (i % columns.length > 2)
+				return "background", "linear-gradient(to right, red, red "+d.value+"%, white "+(100 - d.value)+"%)"
 			}
 		})
-
-
-
   return table;
 }
 
 d3.csv('data.csv',function (data) {
-	var columns = ['name','Overall Index','property rights','government integrity','judicial effectiveness','tax burden']
+	var columns = ['name','year','InequalityRate','property rights','government integrity','judicial effectiveness','tax burden']
   tabulate(data,columns)
 })
+
+//JQuery
+$( function() {
+	$( "#slider" ).slider({
+		min: 2000,
+		max: 2020
+	});
+} );

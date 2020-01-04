@@ -2,8 +2,8 @@
 <meta charset='utf-8'>
 <html>
   <head>
+    <!--D3JS table -->
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
     <style>
       table {
         border-collapse: collapse;
@@ -11,19 +11,41 @@
         font: 12px sans-serif;
         border-spacing: 0;
 
+        margin-left: auto;
+        margin-right: auto;
       }
-
       td,th {
         border: 1px black solid;
         padding: 5px;
         width: 200px;
       }
 
+      .slider {
+        margin-top: 100px;
+        margin-bottom: 100px;
+        width: 1000px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
     </style>
+
+    <!--JQUery slider -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jQuery UI Slider - Default functionality</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
   </head>
   <body>
+    <div id="d3table"></div>
+    <div id="slider" class="slider"></div>
     <script type='text/javascript' src='script.js'></script>
+
   </body>
 </html>
