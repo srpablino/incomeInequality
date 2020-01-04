@@ -23,12 +23,22 @@ var tabulate = function (data,columns) {
       })
       .enter()
     .append('td')
-      .text(function (d) { return d.value })
+		.text(function (d) { return  isNaN(d.value)? d.value : Math.round(d.value * 100) / 100  })
+
+
+	d3.selectAll("td")
+		.style("background", function(d) {
+			if (!isNaN(d.value)){
+			return "background", "linear-gradient(to right, red, red "+d.value+"%, white "+(100 - d.value)+"%)"
+			}
+		})
+
+
 
   return table;
 }
 
 d3.csv('data.csv',function (data) {
-	var columns = ['name','year','Overall Index','property rights','government integrity','judicial effectiveness','tax burden','government spending','fiscal health','business freedom','labor freedom','monetary freedom','trade freedom','investment freedom','financial freedom','InequalityRate']
+	var columns = ['name','Overall Index','property rights','government integrity','judicial effectiveness','tax burden']
   tabulate(data,columns)
 })
