@@ -100,4 +100,8 @@ row.selectAll(".cell")
     .data(function(d, i) { return matrix[i]; })
     .style("fill", colorMap);
 
+d3.csv("data.csv").then(function(data) {
+    console.log(data[0]);
+});
+
 </script>
