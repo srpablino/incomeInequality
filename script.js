@@ -1,9 +1,13 @@
 //D3JS
 var data, columns;
+var table;
+var thead;
+var tbody;
+
 var tabulate = function () {
-	var table = d3.select('#d3table').append('table')
-	var thead = table.append('thead')
-	var tbody = table.append('tbody')
+	table = d3.select('#d3table').append('table')
+	thead = table.append('thead')
+	tbody = table.append('tbody')
 	thead.append('tr')
 	  .selectAll('th')
 	    .data(columns)
@@ -33,14 +37,14 @@ var tabulate = function () {
     .append('td')
 		.text(function (d) { return  isNaN(d.value)? d.value : Math.round(d.value * 100) / 100  })
 
-	d3.selectAll("td")
+	table.selectAll("td")
 		.style("background", function(d,i) {
 			if (!isNaN(d.value)){
 				if (i % columns.length > 2)
 					return "background", "linear-gradient(to right,  red "+d.value+"%, red "+(100 - d.value)+"%, white "+(100 - d.value)+"%)"
 				if (i % columns.length == 2){
-					console.log(normalize(maxmin,d.value)*100)
-					console.log(100 - normalize(maxmin,d.value)*100)
+					//console.log(normalize(maxmin,d.value)*100)
+					//console.log(100 - normalize(maxmin,d.value)*100)
 					return "background", "linear-gradient(to right,  blue "+normalize(maxmin,d.value)*100
 					+"%,  blue "+ (100 - normalize(maxmin,d.value)*100)
 					+"%,  white "+ (100 - normalize(maxmin,d.value)*100)+"%)"
@@ -50,12 +54,30 @@ var tabulate = function () {
 		})
 	return table;
 }
+
+var countriesSelector = function(){
+	var countries = [];
+	for (i=0;i<data.length;i++){
+		if (!countries.includes(data[i]['name'])) countries.push(data[i]['name'] )
+	}
+	radioButtonsCountries(countries);
+}
+
+var indicatorSelector = function(){
+	var indicators = [];
+	for (i=3;i<columns.length;i++){
+		if (!indicators.includes(columns[i])) indicators.push(columns[i])
+	}
+	radioButtonsIndicators(indicators);
+}
+
 d3.csv('data.csv')
 	.then(function(d) {
 		columns = ['name','year','InequalityRate','property rights','government integrity','judicial effectiveness','tax burden']
 		data = d;
-		//tabulate(data,columns)
 		tabulate();
+		countriesSelector();
+		indicatorSelector();
 	});
 
 //slider
@@ -68,20 +90,20 @@ var sliderTime = d3
 	.min(d3.min(dataTime))
 	.max(d3.max(dataTime))
 	.step(1000 * 60 * 60 * 24 * 365)
-	.width(900)
+	.width(1050)
 	.tickFormat(d3.timeFormat('%Y'))
 	.tickValues(dataTime)
 	//.default(new Date(2001, 10, 3))
 	.default(2000)
 	.on('onchange', val => {
-		d3.select('table').remove();
+		table.remove();
 		tabulate();
 	});
 
 var gTime = d3
 	.select('div#slider-time')
 	.append('svg')
-	.attr('width', 1000)
+	.attr('width', 1400)
 	.attr('height', 100)
 	.append('g')
 	.attr('transform', 'translate(30,30)');
@@ -108,5 +130,31 @@ var normalize = function(maxmin,value){
 	return (value - maxmin[1]) / (maxmin[0] - maxmin[1])
 }
 
+//radio buttons
+var radioButtonsCountries = function(selections){
 
+	var ul = d3.select('#selectionCountries').append('ul').attr("class","ul1");
 
+	ul.selectAll('li')
+		.data(selections)
+		.enter()
+		.append('li')
+		.append("label")
+		.text(function(d) { return d; })
+		.insert("input")
+		.attr("type", "checkbox")
+}
+
+var radioButtonsIndicators = function(selections){
+
+	var ul = d3.select('#selectionIndicators').append('ul');
+
+	ul.selectAll('li')
+		.data(selections)
+		.enter()
+		.append('li')
+		.append("label")
+		.text(function(d) { return d; })
+		.insert("input")
+		.attr("type", "checkbox")
+}

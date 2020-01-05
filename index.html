@@ -15,29 +15,73 @@
 
     <style>
       table {
-        border-collapse: collapse;
-        border: 2px black solid;
         font: 12px sans-serif;
-        border-spacing: 0;
-        margin-left: auto;
-        margin-right: auto;
       }
       td,th {
         border: 1px black solid;
         padding: 5px;
         width: 200px;
       }
+      .ul1 {
+        columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+      }
+
     </style>
 
   </head>
+  <h1>Graph Filler</h1>
+  <h4>WHAT</h4>
+  <p>Visualization of Income inequality Rate (blue) and Economic Freedom indicators (red) </p>
+  <h4>WHY</h4>
+  <p>Is important to understand how different indicators of the economic freedom are related with the Income inequality </p>
+  <h4>HOW</h4>
+  <p>You can see the Income inequality column and indicators for each country by year</p>
   <body>
-    <div id="d3table"></div>
-   <!-- Slider -->
-    <div class="container" >
-      <div class="row align-items-center">
-        <div class="col-sm"><div id="slider-time" ></div></div>
-      </div>
-    </div>
+    <table style="width: 100%;border-width: 0px;"  >
+      <tr >
+        <td style="width: 60%;border-width: 0px" >
+          <div >
+            <!-- Table -->
+            <div id="d3table"></div>
+          </div>
+          <div class="container" >
+            <!-- Slider -->
+            <div class="row align-items-center">
+              <div class="col-sm"><div id="slider-time" ></div></div>
+            </div>
+
+          </div>
+        </td>
+        <td style="width: 30%;;border-width: 0px;vertical-align: top">
+          <div >
+            <!-- Selection -->
+            <table style="width: 100%;border-width: 0px;">
+              <tbody>
+              <tr style="border-width: 0px">
+                <th style="border-width: 0px">
+                  Select countries (up to 10)
+                </th>
+                <th style="border-width: 0px">
+                  Select indicators (up to 5)
+                </th>
+              </tr>
+              <tr>
+                <td style="vertical-align: top;width: 60%">
+                  <div id="selectionCountries"></div>
+                </td>
+                <td style="vertical-align: top">
+                  <div id="selectionIndicators"></div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+
     <script type='text/javascript' src='script.js'></script>
   </body>
 </html>
