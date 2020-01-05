@@ -1,5 +1,6 @@
 //D3JS
-var tabulate = function (data,columns) {
+var data, columns;
+var tabulate = function () {
 	var table = d3.select('#d3table').append('table')
 	var thead = table.append('thead')
 	var tbody = table.append('tbody')
@@ -36,9 +37,13 @@ var tabulate = function (data,columns) {
 		.style("background", function(d,i) {
 			if (!isNaN(d.value)){
 				if (i % columns.length > 2)
-					return "background", "linear-gradient(to right, red, red, red, red, white, white "+d.value+"%, white "+(100 - d.value)+"%)"
+					return "background", "linear-gradient(to right,  red "+d.value+"%, red "+(100 - d.value)+"%, white "+(100 - d.value)+"%)"
 				if (i % columns.length == 2){
-					return "background", "linear-gradient(to right, blue, blue, blue, white, white "+normalize(maxmin,d.value)*100+"%, white "+ (100 - normalize(maxmin,d.value)*100)+"%)"
+					console.log(normalize(maxmin,d.value)*100)
+					console.log(100 - normalize(maxmin,d.value)*100)
+					return "background", "linear-gradient(to right,  blue "+normalize(maxmin,d.value)*100
+					+"%,  blue "+ (100 - normalize(maxmin,d.value)*100)
+					+"%,  white "+ (100 - normalize(maxmin,d.value)*100)+"%)"
 				}
 
 			}
@@ -46,9 +51,11 @@ var tabulate = function (data,columns) {
 	return table;
 }
 d3.csv('data.csv')
-	.then(function(data) {
+	.then(function(d) {
 		columns = ['name','year','InequalityRate','property rights','government integrity','judicial effectiveness','tax burden']
-		tabulate(data,columns)
+		data = d;
+		//tabulate(data,columns)
+		tabulate();
 	});
 
 //slider
@@ -67,15 +74,8 @@ var sliderTime = d3
 	//.default(new Date(2001, 10, 3))
 	.default(2000)
 	.on('onchange', val => {
-
 		d3.select('table').remove();
-		//table.transition().remove();
-
-		d3.csv('data.csv')
-			.then(function(data) {
-				var columns = ['name','year','InequalityRate','property rights','government integrity','judicial effectiveness','tax burden']
-				tabulate(data,columns)
-			});
+		tabulate();
 	});
 
 var gTime = d3
