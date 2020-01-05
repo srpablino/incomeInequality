@@ -19,6 +19,8 @@ var tabulate = function (data,columns) {
 		.filter(function(d) {
 			return d.year == 1900 + (sliderTime.value().getYear())
 		})
+	filtered = rows.data();
+	var maxmin = getMaxMin(filtered);
 
 	var cells = rows.selectAll('td')
 	    .data(function(row) {
@@ -34,15 +36,18 @@ var tabulate = function (data,columns) {
 		.style("background", function(d,i) {
 			if (!isNaN(d.value)){
 				if (i % columns.length > 2)
-				return "background", "linear-gradient(to right, red, red "+d.value+"%, white "+(100 - d.value)+"%)"
+					return "background", "linear-gradient(to right, red, red, red, red, white, white "+d.value+"%, white "+(100 - d.value)+"%)"
+				if (i % columns.length == 2){
+					return "background", "linear-gradient(to right, blue, blue, blue, white, white "+normalize(maxmin,d.value)*100+"%, white "+ (100 - normalize(maxmin,d.value)*100)+"%)"
+				}
+
 			}
 		})
-  return table;
+	return table;
 }
-
 d3.csv('data.csv')
 	.then(function(data) {
-		var columns = ['name','year','InequalityRate','property rights','government integrity','judicial effectiveness','tax burden']
+		columns = ['name','year','InequalityRate','property rights','government integrity','judicial effectiveness','tax burden']
 		tabulate(data,columns)
 	});
 
@@ -63,7 +68,7 @@ var sliderTime = d3
 	.default(2000)
 	.on('onchange', val => {
 
-		d3.selectAll('tr').remove();
+		d3.select('table').remove();
 		//table.transition().remove();
 
 		d3.csv('data.csv')
@@ -82,8 +87,26 @@ var gTime = d3
 	.attr('transform', 'translate(30,30)');
 
 gTime.call(sliderTime);
-
 //d3.select('p#value-time').text(d3.timeFormat('%Y')(sliderTime.value()));
+
+//utils
+var getMaxMin = function (data){
+	var max = parseFloat(data[0]["InequalityRate"])
+	var min = parseFloat(data[0]["InequalityRate"])
+	for (i=0; i<data.length;i++){
+		if (parseFloat(data[i]["InequalityRate"]) > max){
+			max = parseFloat(data[i]["InequalityRate"]);
+		}
+		if (parseFloat(data[i]["InequalityRate"]) < min){
+			min = parseFloat(data[i]["InequalityRate"]);
+		}
+	}
+	return [max,min]
+}
+
+var normalize = function(maxmin,value){
+	return (value - maxmin[1]) / (maxmin[0] - maxmin[1])
+}
 
 
 
