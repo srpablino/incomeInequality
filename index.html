@@ -5,6 +5,9 @@
     <!--D3JS table -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
 
     <link
             rel="stylesheet"
@@ -32,26 +35,19 @@
 
   </head>
   <h1>Graph Filler</h1>
-  <h4>WHAT</h4>
-  <p>Visualization of Income inequality Rate (blue) and Economic Freedom indicators (red) </p>
-  <h4>WHY</h4>
-  <p>Is important to understand how different indicators of the economic freedom are related with the Income inequality </p>
-  <h4>HOW</h4>
-  <p>You can see the Income inequality column and indicators for each country by year</p>
+
+  <p><b>What:</b> Visualization of Income inequality Rate (blue) and Economic Freedom indicators (red) </p>
+
+  <p><b>Why:</b>Is important to understand how different indicators of the economic freedom are related with the Income inequality </p>
+
+  <p><b>How:</b>You can see the Income inequality column and indicators for each country by year. You can select the year in which you are interested with the slider at the bottom. You can select up to 15 countries and up to 5 different indicators to compare from the panels at the right</p>
   <body>
     <table style="width: 100%;border-width: 0px;"  >
       <tr >
-        <td style="width: 60%;border-width: 0px" >
+        <td style="width: 60%;border-width: 0px;vertical-align: top" >
           <div >
             <!-- Table -->
             <div id="d3table"></div>
-          </div>
-          <div class="container" >
-            <!-- Slider -->
-            <div class="row align-items-center">
-              <div class="col-sm"><div id="slider-time" ></div></div>
-            </div>
-
           </div>
         </td>
         <td style="width: 30%;;border-width: 0px;vertical-align: top">
@@ -61,7 +57,7 @@
               <tbody>
               <tr style="border-width: 0px">
                 <th style="border-width: 0px">
-                  Select countries (up to 10)
+                  Select countries (up to 15)
                 </th>
                 <th style="border-width: 0px">
                   Select indicators (up to 5)
@@ -81,6 +77,13 @@
         </td>
       </tr>
     </table>
+
+    <div class="container" >
+      <!-- Slider -->
+      <div class="row align-items-center">
+        <div class="col-sm"><div id="slider-time" ></div></div>
+      </div>
+    </div>
 
     <script type='text/javascript' src='script.js'></script>
   </body>
