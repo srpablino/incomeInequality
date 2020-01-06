@@ -5,6 +5,7 @@ var thead;
 var tbody;
 var checkedIndicators = []
 var checkedCountries = []
+var maxmin;
 
 var tabulate = function () {
 	table = d3.select('#d3table').append('table')
@@ -53,14 +54,17 @@ var tabulate = function () {
 		table.selectAll("td")
 			.style("background", function (d, i) {
 				if (!isNaN(d.value)) {
-					if (i % (checkedIndicators.length + 3) > 2)
-						return "background", "linear-gradient(to right,  red " + d.value + "%, red " + (100 - d.value) + "%, white " + (100 - d.value) + "%)"
-					if (i % (checkedIndicators.length + 3) == 2 || i == 2) {
-						return "background", "linear-gradient(to right,  blue " + normalize(maxmin, d.value) * 100
-						+ "%,  blue " + (100 - normalize(maxmin, d.value) * 100)
-						+ "%,  white " + (100 - normalize(maxmin, d.value) * 100) + "%)"
+					var gradient = [];
+					if (i % (checkedIndicators.length + 3) > 2){
+						gradient =  "linear-gradient(to right," + getGradient("red",d.value);
+						return "background", gradient;
 					}
-
+					if (i % (checkedIndicators.length + 3) == 2) {
+						var blue = (Math.round(normalize(maxmin, d.value) * 100) / 100) * 100;
+						gradient = "linear-gradient(to right," + getGradient("blue",blue);
+						console.log(gradient);
+						return "background", gradient;
+					}
 				}
 			})
 	}
@@ -139,7 +143,9 @@ var getMaxMin = function (d){
 }
 
 var normalize = function(maxmin,value){
-	return (value - maxmin[1]) / (maxmin[0] - maxmin[1])
+	//var out = (value - maxmin[1]) / (maxmin[0] - maxmin[1] + 0.0001);
+	var out = value / maxmin[0]
+	return out
 }
 
 //radio buttons
@@ -152,7 +158,7 @@ var radioButtonsCountries = function(selections){
 		.enter()
 		.append('li')
 		.append("label")
-		.text(function(d) { return d; })
+		.text(function(d) { return d+"  "; })
 		.insert("input")
 		.attr("type", "checkbox")
 		.attr("name","countriesCheck")
@@ -172,6 +178,21 @@ var radioButtonsCountries = function(selections){
 	});
 }
 
+var getGradient = function(color, perc){
+	var out = color + " " + perc + "%";
+	var rest = 100 - perc;
+	if (rest == 0){
+		out = out +","+ out + ")"
+	}else{
+		for (rest;rest > 0;rest = rest - 10){
+			out = out + ",white 10%";
+		}
+		out = out + ")"
+	}
+
+	return out
+}
+
 var radioButtonsIndicators = function(selections){
 
 	var ul = d3.select('#selectionIndicators').append('ul');
@@ -181,7 +202,7 @@ var radioButtonsIndicators = function(selections){
 		.enter()
 		.append('li')
 		.append("label")
-		.text(function(d) { return d; })
+		.text(function(d) { return d+"  "; })
 		.insert("input")
 		.attr("name","indicatorsCheck")
 		.attr("type", "checkbox")
