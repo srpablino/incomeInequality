@@ -31,17 +31,30 @@
         -moz-columns: 2;
       }
 
+      .header {
+        padding: 5px;
+        text-align: justify-all;
+        background: #0b8176;
+        color: white;
+      }
+
+      .footer {
+        padding: 20px;
+        text-align: left;
+        background: #0b8176;
+        color: white;
+        font-size: 20px;
+      }
+
+      .mydivclass {overflow-x: hidden; overflow-y: auto;}
+
     </style>
 
   </head>
-  <h1>Visual Analytics 2020 project: Graph Filler </h1>
-
-  <p><b>What:</b> Visualization of Income inequality Rate (blue) and Economic Freedom indicators (red) <br />
-    <b>Why:</b> Is important to understand how different indicators of the economic freedom are related with the Income inequality <br />
-    <b>How:</b> You can see the Income inequality column and indicators for each country by year. You can select the year in which you are interested with the slider at the bottom. You can select up to 15 countries and up to 5 different indicators to compare from the panels at the right
-  </p>
-
-  <body>
+  <div class="header">
+    <h1> Visual Analytics 2020 project: Graph Filler </h1>
+  </div>
+  <body class="mydivclass">
     <table style="width: 100%;border-width: 0px;"  >
       <tr >
         <td style="width: 60%;border-width: 0px;vertical-align: top" >
@@ -78,12 +91,40 @@
       </tr>
     </table>
 
-    <div class="container" >
+
       <!-- Slider -->
-      <div class="row align-items-center">
-        <div class="col-sm"><div id="slider-time" ></div></div>
+      <div >
+        <table >
+          <tr style="column-width: fill-available">
+            <td style="border-width: 0px">
+              Select year for details:
+            </td>
+            <td style="border-width: 0px">
+              <div class="col-sm"><div id="slider-time" ></div></div>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td style="border-width: 0px">
+              Select range of years for correlation colors in indicators column:
+            </td>
+            <td style=" border-width: 0px">
+                <div class="col-sm"><div id="slider-range"></div></div>
+            </td>
+            
+          </tr>
+        </table>
       </div>
+
+
+    <div class="footer">
+      <h4>About:</h4>
+      <b>What:</b> Visualization of Income inequality Rate (blue) and Economic Freedom indicators (red) <br />
+        <b>Why:</b> Is important to understand how different indicators of the economic freedom are related with the Income inequality <br />
+        <b>How:</b> You can see the Income inequality column and indicators for each country by year. You can select the year in which you are interested with the slider at the bottom. You can select up to 15 countries and up to 5 different indicators to compare from the panels at the right
     </div>
+
 
     <script type='text/javascript' src='script.js'></script>
   </body>

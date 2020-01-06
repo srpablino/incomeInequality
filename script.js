@@ -56,12 +56,12 @@ var tabulate = function () {
 				if (!isNaN(d.value)) {
 					var gradient = [];
 					if (i % (checkedIndicators.length + 3) > 2){
-						gradient =  "linear-gradient(to right," + getGradient("red",d.value);
+						gradient =  "linear-gradient(to right," + getGradient("#5897F2",d.value);
 						return "background", gradient;
 					}
 					if (i % (checkedIndicators.length + 3) == 2) {
 						var blue = (Math.round(normalize(maxmin, d.value) * 100) / 100) * 100;
-						gradient = "linear-gradient(to right," + getGradient("blue",blue);
+						gradient = "linear-gradient(to right," + getGradient("#55f296",blue);
 						console.log(gradient);
 						return "background", gradient;
 					}
@@ -96,7 +96,7 @@ d3.csv('data.csv')
 		indicatorSelector();
 	});
 
-//slider
+//slider-year
 var dataTime = d3.range(0, 19).map(function(d) {
 	return new Date(2000 + d, 10, 3);
 });
@@ -126,6 +126,31 @@ var gTime = d3
 
 gTime.call(sliderTime);
 //d3.select('p#value-time').text(d3.timeFormat('%Y')(sliderTime.value()));
+
+//slider-Range
+var sliderRange = d3
+	.sliderBottom()
+	.min(d3.min(dataTime))
+	.max(d3.max(dataTime))
+	//.step(1000 * 60 * 60 * 24 * 365)
+	.width(1050)
+	.tickFormat(d3.timeFormat('%Y'))
+	.tickValues(dataTime)
+	.default([new Date(2005, 10, 3),new Date(2010, 10, 3)])
+	.fill('#2196f3')
+	.on('onchange', val => {
+		//d3.select('p#value-range').text(val.map(d3.format('.2%')).join('-'));
+	});
+
+var gRange = d3
+	.select('div#slider-range')
+	.append('svg')
+	.attr('width', 1400)
+	.attr('height', 100)
+	.append('g')
+	.attr('transform', 'translate(30,30)');
+
+gRange.call(sliderRange);
 
 //utils
 var getMaxMin = function (d){
