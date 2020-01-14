@@ -247,6 +247,18 @@ var radioButtonsIndicators = function(selections){
 	});
 }
 
+//pearsonCorrelation
+var calculateCorr = function (data, specific_column){
+  var colArray = [];
+  ineqArray= [];
+  data.forEach(function(d){
+    colArray.push(d.specific_column);
+    ineqArray.push(d.InequalityRate);
+  });
+  var newArray=[colArray,ineqArray];
+  return pearsonCorrelation(newArray,0,1);
+}
+//calculate the correlation between 2 arrays
 var pearsonCorrelation = function(prefs, p1, p2){
   var si = [];
 
@@ -287,6 +299,7 @@ var pearsonCorrelation = function(prefs, p1, p2){
   console.log("Correlatioon");
   return num / den;
 }
+//example
 var data = new Array(
                     new Array(21,54,60,78,82),
                     new Array(20,54,54,65,45)
