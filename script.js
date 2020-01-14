@@ -6,8 +6,13 @@ var tbody;
 var checkedIndicators = []
 var checkedCountries = []
 var maxmin;
+var headers;
+var header_sort = {}
+var lastSorted = null
 
 var tabulate = function () {
+    dateRange = getRangeDates()
+    //console.log(dateRange[0])
 	table = d3.select('#d3table').append('table')
 	thead = table.append('thead')
 	tbody = table.append('tbody')
@@ -28,7 +33,9 @@ var tabulate = function () {
 	    .enter()
 		.append('tr')
 		.filter(function(d) {
-			return d.year == 1900 + (sliderTime.value().getYear()) && checkedCountries.includes(d.name)
+		    //console.log()
+			//return d.year == 1900 + (sliderTime.value().getYear()) && checkedCountries.includes(d.name)
+            return (d.year >= dateRange[0] && d.year <= dateRange[1]) && checkedCountries.includes(d.name)
 		})
 
 	if (checkedCountries.length > 0) {
@@ -62,13 +69,67 @@ var tabulate = function () {
 					if (i % (checkedIndicators.length + 3) == 2) {
 						var blue = (Math.round(normalize(maxmin, d.value) * 100) / 100) * 100;
 						gradient = "linear-gradient(to right," + getGradient("#55f296",blue);
-						console.log(gradient);
+						//console.log(gradient);
 						return "background", gradient;
 					}
 				}
 			})
 	}
-	return table;
+
+
+    headers = table.selectAll("th").data(columns);
+
+    headers
+        .on("click", function(d) {
+            console.log(d)
+            // even number of clicks
+            //if (clicks.title % 2 == 0) {
+            // sort ascending: alphabetically
+            if (header_sort[d] % 2 == 0){
+                rows.sort(function(a,b) {
+                    //console.log(JSON.stringify(a[d]));
+                    if (a[d] < b[d]) {
+                        return -1;
+                    } else if (a[d] > b[d]) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+            }else{
+                rows.sort(function(a,b) {
+                    //console.log(JSON.stringify(a[d]));
+                    if (a[d] < b[d]) {
+                        return 1;
+                    } else if (a[d] > b[d]) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+            }
+
+            header_sort[d]++;
+            console.log(header_sort[d])
+
+            // odd number of clicks
+            /*} else if (clicks.title % 2 != 0) {
+                // sort descending: alphabetically
+                rows.sort(function(a,b) {
+                    if (a.title.toUpperCase() < b.title.toUpperCase()) {
+                        return 1;
+                    } else if (a.title.toUpperCase() > b.title.toUpperCase()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+            }*/
+        });
+
+
+
+    return table;
 }
 
 var countriesSelector = function(){
@@ -91,6 +152,11 @@ d3.csv('data.csv')
 	.then(function(d) {
 		columns = ['name',	'year',	'InequalityRate',	'property rights',	'government integrity',	'judicial effectiveness',	'tax burden',	'government spending',	'fiscal health',	'business freedom',	'labor freedom',	'monetary freedom',	'trade freedom',	'investment freedom',	'financial freedom']
 		data = d;
+
+        for (i =0; i< columns.length;i++){
+		    header_sort[columns[i]] = 0;
+        }
+        console.log(header_sort)
 		tabulate();
 		countriesSelector();
 		indicatorSelector();
@@ -101,30 +167,9 @@ var dataTime = d3.range(0, 19).map(function(d) {
 	return new Date(2000 + d, 10, 3);
 });
 
-var sliderTime = d3
-	.sliderBottom()
-	.min(d3.min(dataTime))
-	.max(d3.max(dataTime))
-	.step(1000 * 60 * 60 * 24 * 365)
-	.width(1050)
-	.tickFormat(d3.timeFormat('%Y'))
-	.tickValues(dataTime)
-	//.default(new Date(2001, 10, 3))
-	.default(2000)
-	.on('onchange', val => {
-		table.remove();
-		tabulate();
-	});
-
-var gTime = d3
-	.select('div#slider-time')
-	.append('svg')
-	.attr('width', 1400)
-	.attr('height', 100)
-	.append('g')
-	.attr('transform', 'translate(30,30)');
-
-gTime.call(sliderTime);
+var sliderTime;
+var gTime;
+//gTime.call(sliderTime);
 //d3.select('p#value-time').text(d3.timeFormat('%Y')(sliderTime.value()));
 
 //slider-Range
@@ -132,6 +177,7 @@ var sliderRange = d3
 	.sliderBottom()
 	.min(d3.min(dataTime))
 	.max(d3.max(dataTime))
+    .step(1000 * 60 * 60 * 24 * 365)
 	//.step(1000 * 60 * 60 * 24 * 365)
 	.width(1050)
 	.tickFormat(d3.timeFormat('%Y'))
@@ -139,8 +185,43 @@ var sliderRange = d3
 	.default([new Date(2005, 10, 3),new Date(2010, 10, 3)])
 	.fill('#2196f3')
 	.on('onchange', val => {
+        table.remove();
+        //gTime.remove();
+        tabulate();
+	    //console.log( val.map(function(num) { return num;}) );
 		//d3.select('p#value-range').text(val.map(d3.format('.2%')).join('-'));
 	});
+
+var getRangeDates = function () {
+    dates = sliderRange.value().map(a => new Date(a).getYear() + 1900)
+
+    /*sliderTime = d3
+        .sliderBottom()
+        .min(new Date(dates[0],1,1))
+        .max(new Date(dates[1],1,1))
+        .step(1000 * 60 * 60 * 24 * 365)
+        .width(1050)
+        .tickFormat(d3.timeFormat('%Y'))
+        .tickValues(dataTime)
+        //.default(new Date(2001, 10, 3))
+        .default(2000)
+        .on('onchange', val => {
+            table.remove();
+            tabulate();
+        });
+
+    gTime = d3
+        .select('div#slider-time')
+        .append('svg')
+        .attr('width', 1400)
+        .attr('height', 100)
+        .append('g')
+        .attr('transform', 'translate(30,30)');
+
+    gTime.call(sliderTime); */
+
+    return dates;
+}
 
 var gRange = d3
 	.select('div#slider-range')
