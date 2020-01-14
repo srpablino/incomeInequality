@@ -24,9 +24,17 @@ var tabulate = function () {
 			return checkedIndicators.includes(d) || i < 3
 		})
 	  .append('th')
-	    .text(function (d, i) {
+		.on("mouseover",function (d) {
+			d3.select(this).style("cursor", "pointer");
+			d3.select(this).style("background", "#d0e9f3");
+		})
+		.on("mouseout",function (d) {
+			d3.select(this).style("cursor", "default");
+			d3.select(this).style("background", "#ffffff");
+		})
+        .text(function (d, i) {
 	    	return d
-	    })
+	    });
 
 	var rows = tbody.selectAll('tr')
 		.data(data)
@@ -178,7 +186,6 @@ var sliderRange = d3
 	.min(d3.min(dataTime))
 	.max(d3.max(dataTime))
     .step(1000 * 60 * 60 * 24 * 365)
-	//.step(1000 * 60 * 60 * 24 * 365)
 	.width(1050)
 	.tickFormat(d3.timeFormat('%Y'))
 	.tickValues(dataTime)
