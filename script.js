@@ -233,7 +233,7 @@ var getRangeDates = function () {
 var gRange = d3
 	.select('div#slider-range')
 	.append('svg')
-	.attr('width', 1400)
+	.attr('width', 1100)
 	.attr('height', 100)
 	.append('g')
 	.attr('transform', 'translate(30,30)');
