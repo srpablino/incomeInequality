@@ -8,7 +8,7 @@ var checkedCountries = []
 var maxmin;
 var headers;
 var header_sort = {}
-var lastSorted = null
+var color_code = {}
 
 var tabulate = function () {
     dateRange = getRangeDates()
@@ -44,10 +44,14 @@ var tabulate = function () {
 		    //console.log()
 			//return d.year == 1900 + (sliderTime.value().getYear()) && checkedCountries.includes(d.name)
             return (d.year >= dateRange[0] && d.year <= dateRange[1]) && checkedCountries.includes(d.name)
+
 		})
 
 	if (checkedCountries.length > 0) {
 		filtered = rows.data();
+
+		correlations = getCorrelations(filtered);
+
 		var maxmin = getMaxMin(filtered);
 
 		var cells = rows.selectAll('td')
@@ -77,7 +81,6 @@ var tabulate = function () {
 					if (i % (checkedIndicators.length + 3) == 2) {
 						var blue = (Math.round(normalize(maxmin, d.value) * 100) / 100) * 100;
 						gradient = "linear-gradient(to right," + getGradient("#55f296",blue);
-						//console.log(gradient);
 						return "background", gradient;
 					}
 				}
@@ -89,7 +92,6 @@ var tabulate = function () {
 
     headers
         .on("click", function(d) {
-            console.log(d)
             // even number of clicks
             //if (clicks.title % 2 == 0) {
             // sort ascending: alphabetically
@@ -118,7 +120,6 @@ var tabulate = function () {
             }
 
             header_sort[d]++;
-            console.log(header_sort[d])
 
             // odd number of clicks
             /*} else if (clicks.title % 2 != 0) {
@@ -334,3 +335,90 @@ var radioButtonsIndicators = function(selections){
 		tabulate()
 	});
 }
+
+
+var getCorrelations = function(d){
+
+	//first we order by year ascending (correlation troughtout time)
+	d.sort(function(a,b) {
+		return a.year - b.year
+	});
+
+	//get the countries currently displayed
+	countries = []
+	countries = d.map(a => a.name).filter((x,i,a) => a.indexOf(x)==i)
+
+	countries_data = {};
+	for (var c=0;c<countries.length;c++){
+		countries_data[countries[c]] = []
+		for (var i=2;i<columns.length;i++){
+			indicator = d.filter(a => a.name == countries[c]).map(j => parseFloat(j[columns[i]]))
+			countries_data[countries[c]].push(indicator)
+		}
+		for (var i=3;i<columns.length;i++){
+			correlation = pearsonCorrelation(countries_data[countries[c]],0,i-2)
+			color = "#FFFFFF"
+			if (correlation < 0){
+				color = "#FF5E50"
+			}
+			if (correlation > 0){
+				color = "#5897F2"
+			}
+			color_code[countries[c]+"_"+columns[i]] = color
+		}
+	}
+	//console.log(countries_data)
+}
+
+//calculate the correlation between 2 arrays
+var pearsonCorrelation = function(prefs, p1, p2){
+	var si = [];
+
+	console.log(prefs)
+	console.log(p1)
+	console.log(p2)
+
+	for (var key in prefs[p1]) {
+		if (prefs[p2][key]) si.push(key);
+	}
+
+	var n = si.length;
+
+	if (n == 0) return 0;
+
+	var sum1 = 0;
+	for (var i = 0; i < si.length; i++) sum1 += prefs[p1][si[i]];
+
+	var sum2 = 0;
+	for (var i = 0; i < si.length; i++) sum2 += prefs[p2][si[i]];
+
+	var sum1Sq = 0;
+	for (var i = 0; i < si.length; i++) {
+		sum1Sq += Math.pow(prefs[p1][si[i]], 2);
+	}
+
+	var sum2Sq = 0;
+	for (var i = 0; i < si.length; i++) {
+		sum2Sq += Math.pow(prefs[p2][si[i]], 2);
+	}
+
+	var pSum = 0;
+	for (var i = 0; i < si.length; i++) {
+		pSum += prefs[p1][si[i]] * prefs[p2][si[i]];
+	}
+
+	var num = pSum - (sum1 * sum2 / n);
+	var den = Math.sqrt((sum1Sq - Math.pow(sum1, 2) / n) *
+		(sum2Sq - Math.pow(sum2, 2) / n));
+
+	if (den == 0) return 0;
+
+	console.log("The correlation: " + num / den);
+
+	return num / den;
+}
+//example
+var data2 = new Array(
+	new Array(1,10,20,30,40),
+	new Array(500,400,300,200,100)
+);
