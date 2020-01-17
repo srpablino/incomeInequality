@@ -32,29 +32,51 @@
       }
 
       .header {
-        padding: 5px;
+        padding: 15px;
         text-align: center;
-        background: #0b8176;
-        color: white;
+        background-color: transparent;
+        color: #535b6d;
       }
-
+      .container-fluid {
+        padding-top: 70px;
+        padding-bottom: 70px;
+      }
+      .bg-2 {
+        background-color: #474e5d;
+        color: #ffffff;
+      }
       .footer {
         padding: 20px;
         text-align: justify-all;
-        background: #0b8176;
+        background: #535b6d;
         color: white;
         font-size: 20px;
       }
 
-      .mydivclass {overflow-x: hidden; overflow-y: auto;}
+      .mydivclass {overflow-x: hidden; overflow-y: auto; padding: 20px;}
 
     </style>
   <title>Inecome Inequality vs EF indicators</title>
   </head>
   <div class="header">
-    <h1> VA 2020 project: Income Inequality vs Economic Freedom indicators </h1>
+    <h1> The Exploration of Income Inequality Rate </h1>
   </div>
-  <body class="mydivclass">
+  <body >
+
+  <div class="container-fluid bg-2 text-center">
+    <h2 style="color:#65a2c7"><em>About</em></h2>
+    <h4 style="text-align: justify"> The visualization focuses on the exploration of the relationship between income inequality rate and the indicators of economic freedom. We would like to demonsrate how income inequality rate correlates between each indicators of economic freedom</h4>
+    <br>
+
+    <h2 style="color:#65a2c7"><em>Income Inequality Rate</em></h2>
+    <h4 style="text-align: justify"> Each country has income inequality rate information ranges between 0 to 10 over time. The rate of O indicates the lowest income inequality exist and the rate of 10 indicates the highest income inequality</h4>
+    <br>
+
+    <h2 style="color:#65a2c7"><em>How to Use </em></h2>
+    <h4 style="text-align: justify"> Select countries that you would like to investigate. Select the attributes that you would like to see the correlation between the income inequality rate. Select a specific year interval that you are interested in</h4>
+  </div>
+
+  <div class="mydivclass">
   <!-- Slider -->
   <div >
     <table >
@@ -148,22 +170,14 @@
       </tr>
     </table>
 
+  </div>
 
 
 
-
-    <div class="footer">
-      <h4>About:</h4>
-      <b>What:</b> Visualization of income inequality rate and economic freedom indicators. <br />
-        <b>Why:</b> Is important to understand how different indicators of the economic freedom correlates with the income inequality rate.<br />
-        <b>How:</b> You can see the income inequality column and indicators columns for each country by year.<br />
-      You can select up to 15 countries and up to 5 different indicators to compare from the panels at the right.<br />
-      You can select the year in which you are interested with the first slider at the bottom.<br />
-      You can select a range of years for which the table will show the correlation between the income inequality rate and each selected economic freedom indicator.
-
-    </div>
-
-
+  </div>
     <script type='text/javascript' src='script.js'></script>
   </body>
+  <footer class="container-fluid bg-2 text-center">
+    <p> Made By Pablo and Buse</a></p>
+  </footer>
 </html>

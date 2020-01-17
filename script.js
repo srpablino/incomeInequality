@@ -108,7 +108,7 @@ var tabulate = function () {
 					}
 					if (i % (checkedIndicators.length + 3) == 2) {
 						var blue = (Math.round(normalize(maxmin, d.value) * 100) / 100) * 100;
-						gradient = "linear-gradient(to right," + getGradient("#55f296",blue);
+						gradient = "linear-gradient(to right," + getGradient("rgba(83,91,109,0.47)",blue);
 						return "background", gradient;
 					}
 				}
@@ -202,7 +202,7 @@ var sliderRange = d3
 	.tickFormat(d3.timeFormat('%Y'))
 	.tickValues(dataTime)
 	.default([new Date(2005, 10, 3),new Date(2010, 10, 3)])
-	.fill('#2196f3')
+	.fill('#535b6d')
 	.on('onchange', val => {
         table.remove();
         //gTime.remove();
