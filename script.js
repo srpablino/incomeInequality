@@ -37,7 +37,9 @@ var tabulate = function () {
 	    }).on("click", function(d) {
 			if (header_sort[d] % 2 == 0){
 				rows.sort(function(a,b) {
-					console.log(d+" + "+b[d] )
+					if (!isNaN(parseFloat(a[d]))){
+						return parseFloat(parseFloat(a[d]) - parseFloat(b[d]))
+					}
 					if (a[d] < b[d]) {
 						return -1;
 					} else if (a[d] > b[d]) {
@@ -48,7 +50,9 @@ var tabulate = function () {
 				});
 			}else{
 				rows.sort(function(a,b) {
-					console.log(d+" + "+b[d])
+					if (!isNaN(parseFloat(a[d]))){
+						return parseFloat( parseFloat(b[d]) - parseFloat(a[d]))
+					}
 					if (a[d] < b[d]) {
 						return 1;
 					} else if (a[d] > b[d]) {
