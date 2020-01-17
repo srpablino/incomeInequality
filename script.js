@@ -34,7 +34,32 @@ var tabulate = function () {
 		})
         .text(function (d, i) {
 	    	return d
-	    });
+	    }).on("click", function(d) {
+			if (header_sort[d] % 2 == 0){
+				rows.sort(function(a,b) {
+					console.log(d+" + "+b[d] )
+					if (a[d] < b[d]) {
+						return -1;
+					} else if (a[d] > b[d]) {
+						return 1;
+					} else {
+						return 0;
+					}
+				});
+			}else{
+				rows.sort(function(a,b) {
+					console.log(d+" + "+b[d])
+					if (a[d] < b[d]) {
+						return 1;
+					} else if (a[d] > b[d]) {
+						return -1;
+					} else {
+						return 0;
+					}
+				});
+			}
+			header_sort[d]++;
+	});
 
 	var rows = tbody.selectAll('tr')
 		.data(data)
@@ -91,14 +116,9 @@ var tabulate = function () {
 	}
 
 
-    headers = table.selectAll("th").data(columns);
+   /*headers = table.selectAll("th").data(columns);
 
-    headers
-		.on("click", function(d) {
-			//d = columns[columns.indexOf(y)];
-			// even number of clicks
-			//if (clicks.title % 2 == 0) {
-			// sort ascending: alphabetically
+    headers.on("click", function(d) {
 			if (header_sort[d] % 2 == 0){
 				rows.sort(function(a,b) {
 					//console.log(JSON.stringify(a[d]));
@@ -124,23 +144,8 @@ var tabulate = function () {
 					}
 				});
 			}
-
             header_sort[d]++;
-
-            // odd number of clicks
-            /*} else if (clicks.title % 2 != 0) {
-                // sort descending: alphabetically
-                rows.sort(function(a,b) {
-                    if (a.title.toUpperCase() < b.title.toUpperCase()) {
-                        return 1;
-                    } else if (a.title.toUpperCase() > b.title.toUpperCase()) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-            }*/
-        });
+        });*/
 
 
 
