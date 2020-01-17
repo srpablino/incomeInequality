@@ -440,3 +440,9 @@ var data2 = new Array(
 	new Array(1,10,20,30,40),
 	new Array(500,400,300,200,100)
 );
+
+var svg_work = function () {
+
+}
+
+svg_work()
