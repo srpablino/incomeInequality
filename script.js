@@ -74,8 +74,11 @@ var tabulate = function () {
 			.style("background", function (d, i) {
 				if (!isNaN(d.value)) {
 					var gradient = [];
-					if (i % (checkedIndicators.length + 3) > 2){
-						gradient =  "linear-gradient(to right," + getGradient("#5897F2",d.value);
+					indicator_index = i % (checkedIndicators.length + 3)
+					if (indicator_index > 2){
+						color_cell = color_code[this.parentElement.childNodes[0].textContent+"_"+columns[indicator_index]];
+						//gradient =  "linear-gradient(to right," + getGradient("#5897F2",d.value);
+						gradient =  "linear-gradient(to right," + getGradient(color_cell,d.value);
 						return "background", gradient;
 					}
 					if (i % (checkedIndicators.length + 3) == 2) {
@@ -91,33 +94,36 @@ var tabulate = function () {
     headers = table.selectAll("th").data(columns);
 
     headers
-        .on("click", function(d) {
-            // even number of clicks
-            //if (clicks.title % 2 == 0) {
-            // sort ascending: alphabetically
-            if (header_sort[d] % 2 == 0){
-                rows.sort(function(a,b) {
-                    //console.log(JSON.stringify(a[d]));
-                    if (a[d] < b[d]) {
-                        return -1;
-                    } else if (a[d] > b[d]) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
-            }else{
-                rows.sort(function(a,b) {
-                    //console.log(JSON.stringify(a[d]));
-                    if (a[d] < b[d]) {
-                        return 1;
-                    } else if (a[d] > b[d]) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-            }
+		.on("click", function(d) {
+			//d = columns[columns.indexOf(y)];
+			// even number of clicks
+			//if (clicks.title % 2 == 0) {
+			// sort ascending: alphabetically
+			if (header_sort[d] % 2 == 0){
+				rows.sort(function(a,b) {
+					//console.log(JSON.stringify(a[d]));
+					console.log(d+" + "+b[d] )
+					if (a[d] < b[d]) {
+						return -1;
+					} else if (a[d] > b[d]) {
+						return 1;
+					} else {
+						return 0;
+					}
+				});
+			}else{
+				rows.sort(function(a,b) {
+					console.log(d+" + "+b[d])
+					//console.log(JSON.stringify(a[d]));
+					if (a[d] < b[d]) {
+						return 1;
+					} else if (a[d] > b[d]) {
+						return -1;
+					} else {
+						return 0;
+					}
+				});
+			}
 
             header_sort[d]++;
 
@@ -165,7 +171,7 @@ d3.csv('data.csv')
         for (i =0; i< columns.length;i++){
 		    header_sort[columns[i]] = 0;
         }
-        console.log(header_sort)
+        //console.log(header_sort)
 		tabulate();
 		countriesSelector();
 		indicatorSelector();
@@ -357,12 +363,18 @@ var getCorrelations = function(d){
 		}
 		for (var i=3;i<columns.length;i++){
 			correlation = pearsonCorrelation(countries_data[countries[c]],0,i-2)
-			color = "#FFFFFF"
-			if (correlation < 0){
-				color = "#FF5E50"
+			color = "#e5e5e5"
+			if (-0.6 < correlation && correlation < - 0.3){
+				color = "rgba(255,94,80,0.53)"
 			}
-			if (correlation > 0){
-				color = "#5897F2"
+			if (correlation <= - 0.6){
+				color = "#ed5749"
+			}
+			if (0.3 < correlation && correlation < 0.6){
+				color = "rgba(88,151,242,0.5)"
+			}
+			if (correlation >= 0.6){
+				color = "#4f7ecf"
 			}
 			color_code[countries[c]+"_"+columns[i]] = color
 		}
@@ -374,9 +386,9 @@ var getCorrelations = function(d){
 var pearsonCorrelation = function(prefs, p1, p2){
 	var si = [];
 
-	console.log(prefs)
-	console.log(p1)
-	console.log(p2)
+	//console.log(prefs)
+	//console.log(p1)
+	//console.log(p2)
 
 	for (var key in prefs[p1]) {
 		if (prefs[p2][key]) si.push(key);
@@ -413,10 +425,11 @@ var pearsonCorrelation = function(prefs, p1, p2){
 
 	if (den == 0) return 0;
 
-	console.log("The correlation: " + num / den);
+	//console.log("The correlation: " + num / den);
 
 	return num / den;
 }
+
 //example
 var data2 = new Array(
 	new Array(1,10,20,30,40),
